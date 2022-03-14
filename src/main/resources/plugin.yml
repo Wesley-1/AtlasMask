@@ -1,0 +1,6 @@
+name: AtlasMask
+version: ${project.version}
+main: atlasmask.atlasmask.AtlasMask
+depend:
+  - AtlasUniversal
+  - NBTAPI

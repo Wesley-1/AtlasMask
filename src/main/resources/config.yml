@@ -1,0 +1,30 @@
+AtlasMasks:
+  Test:
+    item:
+      title: "&c&lTEST MASK"
+      lore:
+        - "&aThis is the TestMask"
+        - ""
+        - ""
+        - "&f%ID%"
+        - ""
+      skull-url: "http://textures.minecraft.net/texture/2a1898b4147c6f7137b256fb468640738fdae532692b90e4e9ef2e62976c7a7d"
+    buffs:
+      - "ExtraHearts:10"
+      - "OutgoingDamage:10.5"
+      - "IncomingDamage:20"
+    lore-when-attached:
+      - ""
+      - "&BAttached: &fTest Mask"
+      - ""
+      - "&fThis seems to work"
+Empty:
+  skull-url: "http://textures.minecraft.net/texture/3743f0a3849afd50dc332e5cad284a2555161a4bf9122a8c635940b9d21ed393"
+  item:
+    title: "&dCustom Mask"
+    lore:
+      - "&aThis is an empty mask"
+      - ""
+      - "&fMasksApplied: &a%1%, &b%2%"
+  lore-when-attached:
+    - "&fMasks: &a%1%, &b%2%"
