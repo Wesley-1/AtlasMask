@@ -34,14 +34,6 @@ public class HeartsBuff implements Buff<ArmorEquipEvent> {
             AtlasData.masksInUse.put(event.getPlayer().getUniqueId(), event.getNewArmorPiece());
             event.getPlayer().setMaxHealth(20 + new NBTItem(event.getNewArmorPiece()).getDouble("ExtraHearts"));
             AtlasData.entityIdMap.put(event.getPlayer().getEntityId(), event.getPlayer());
-            ItemMeta meta = event.getNewArmorPiece().getItemMeta();
-
-            if (new NBTItem(event.getNewArmorPiece()).hasKey("EMPTY-USED")) {
-                ItemStack item = SkullCreator.itemFromUrl(instance.getConfig().getString("Empty.skull-url"));
-
-            } else {
-                ItemStack item = SkullCreator.itemFromUrl(instance.getConfig().getString("AtlasMasks." + new NBTItem(event.getNewArmorPiece()).getString("ATTACHED") + ".item.skull-url"));
-            }
         }
     }
 

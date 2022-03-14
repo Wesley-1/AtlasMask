@@ -38,6 +38,7 @@ public class ManipulateSkull {
     private static Field entityId;
     private static Field slotField;
     private static Field itemField;
+    private final AtlasMask instance;
 
     static {
         try {
@@ -55,23 +56,26 @@ public class ManipulateSkull {
 
     public ManipulateSkull() {
         EventSubscriptions.instance.subscribe(this, getClass());
+        this.instance = AtlasMask.getPlugin(AtlasMask.class);
     }
 
     @EventSubscription
     private void onPacket(PacketEventOutEquipment event) {
         PacketPlayOutEntityEquipment packet = event.getPacket();
         try {
+            System.out.println("TEST");
             ItemStack equipment = CraftItemStack.asBukkitCopy((net.minecraft.server.v1_8_R3.ItemStack) itemField.get(packet));
+            NBTItem item = new NBTItem(equipment);
 
-          //  SkinInfo skinInfo = SkinInfo.read(equipment);
-        //    if (skinInfo != null) {
-          //      for (Skin skin : skinInfo.getSkins()) {
-             //       if (skin.getEquipDisguise() != null) {
-
-             //   itemField.set(packet, CraftItemStack.asNMSCopy(equipment));
-                //    }
-             //   }
-          //  }
+            if (!AtlasData.masksInUse.containsKey(event.getPlayer().getUniqueId())) return;
+            if (!item.hasKey("ATTACHED")) return;
+            if (item.hasKey("EMPTY-USED")) {
+                itemField.set(packet, CraftItemStack.asNMSCopy(SkullyUtility.getCustomSkull(instance.getConfig().getString("Empty.skull-url"))));
+            } else {
+                if (item.getItem() == null) return;
+                System.out.println("TEST");
+                itemField.set(packet, CraftItemStack.asNMSCopy(SkullyUtility.getCustomSkull(instance.getConfig().getString("AtlasMasks." + item.getString("ATTACHED") + ".item.skull-url"))));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

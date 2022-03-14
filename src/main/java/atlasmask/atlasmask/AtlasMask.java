@@ -4,7 +4,8 @@ import atlasmask.atlasmask.data.AtlasData;
 import atlasmask.atlasmask.listeners.*;
 import atlasmask.atlasmask.mask.MaskRepository;
 import atlasmask.atlasmask.packets.ManipulateSkull;
-import atlasmask.atlasmask.packets.reflection.ReflectionUtils;
+import atlasmask.atlasmask.packets.injector.EquipmentInjector;
+import atlasmask.atlasmask.packets.subscription.EventSubscriptions;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ConnectionSide;
@@ -22,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,12 +37,15 @@ import java.util.UUID;
 public final class AtlasMask extends JavaPlugin {
 
     @Getter private MaskRepository maskRepository;
+    @Getter private EquipmentInjector injector;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         this.maskRepository = new MaskRepository();
         setupMasks();
+        new EventSubscriptions(this);
+        injector = new EquipmentInjector();
         Bukkit.getPluginManager().registerEvents(new ArmorEquipEvent(), this);
         Bukkit.getPluginManager().registerEvents(new DamageEvent(), this);
         Bukkit.getPluginManager().registerEvents(new ApplyMaskEvent(), this);
