@@ -13,7 +13,6 @@ public class AtlasData implements AtlasComponent {
     private static final transient AtlasData INSTANCE = new AtlasData();
 
     public static ConcurrentHashMap<UUID, ItemStack> masksInUse = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<Integer, Player> entityIdMap = new ConcurrentHashMap<>();
 
     private AtlasData() {}
 

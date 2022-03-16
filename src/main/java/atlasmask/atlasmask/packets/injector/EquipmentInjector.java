@@ -16,7 +16,6 @@ public class EquipmentInjector {
 
     public EquipmentInjector() {
         EventSubscriptions.instance.subscribe(this, getClass());
-        Bukkit.getOnlinePlayers().forEach(this::inject);
     }
 
     @EventSubscription

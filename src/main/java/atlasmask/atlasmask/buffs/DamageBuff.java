@@ -28,7 +28,6 @@ public class DamageBuff implements Buff<ArmorEquipEvent> {
             if (AtlasData.masksInUse.containsKey(event.getPlayer().getUniqueId())) return;
 
             AtlasData.masksInUse.put(event.getPlayer().getUniqueId(), event.getNewArmorPiece());
-            AtlasData.entityIdMap.put(event.getPlayer().getEntityId(), event.getPlayer());
         }
     }
 
@@ -38,7 +37,6 @@ public class DamageBuff implements Buff<ArmorEquipEvent> {
             if (!new NBTItem(event.getOldArmorPiece()).hasKey( "ATTACHED")) return;
             if (!new NBTItem(event.getOldArmorPiece()).hasKey( "OutgoingDamage")) return;
             AtlasData.masksInUse.remove(event.getPlayer().getUniqueId());
-            AtlasData.entityIdMap.remove(event.getPlayer().getEntityId(), event.getPlayer());
         }
     }
 }

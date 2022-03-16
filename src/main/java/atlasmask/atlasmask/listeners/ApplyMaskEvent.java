@@ -1,6 +1,7 @@
 package atlasmask.atlasmask.listeners;
 
 import atlasmask.atlasmask.AtlasMask;
+import atlasmask.atlasmask.data.AtlasData;
 import com.sun.tools.javac.jvm.Items;
 import de.tr7zw.nbtapi.NBTItem;
 import dev.dbassett.skullcreator.SkullCreator;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ApplyMaskEvent implements Listener {
     private final AtlasMask instance;
@@ -92,8 +94,12 @@ public class ApplyMaskEvent implements Listener {
 
             currentNBT.removeKey( "ATTACHED");
             removeAttributes(current);
+
+            NBTItem maskGiven = new NBTItem(newMask);
+            maskGiven.setString(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+            AtlasData.masksInUse.remove(event.getWhoClicked().getUniqueId());
             event.setCurrentItem(currentNBT.getItem());
-            event.getWhoClicked().getInventory().addItem(newMask);
+            event.getWhoClicked().getInventory().addItem(maskGiven.getItem());
             event.setCancelled(true);
 
 
@@ -109,13 +115,6 @@ public class ApplyMaskEvent implements Listener {
         } else if (nbtItem.hasKey( "IncomingDamage")) {
             nbtItem.removeKey( "IncomingDamage");
         }
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        event.getPlayer().getInventory().addItem(SkullCreator.itemFromUrl("http://textures.minecraft.net/texture/3743f0a3849afd50dc332e5cad284a2555161a4bf9122a8c635940b9d21ed393"));
-        event.getPlayer().getInventory().addItem(instance.getEmptyMask());
-        event.getPlayer().getInventory().addItem(instance.getMaskRepository().getMaskMap().get("Test"));
     }
 
 }

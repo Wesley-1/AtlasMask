@@ -5,9 +5,6 @@ AtlasMasks:
       lore:
         - "&aThis is the TestMask"
         - ""
-        - ""
-        - "&f%ID%"
-        - ""
       skull-url: "http://textures.minecraft.net/texture/2a1898b4147c6f7137b256fb468640738fdae532692b90e4e9ef2e62976c7a7d"
     buffs:
       - "ExtraHearts:10"
@@ -28,3 +25,22 @@ Empty:
       - "&fMasksApplied: &a%1%, &b%2%"
   lore-when-attached:
     - "&fMasks: &a%1%, &b%2%"
+Messages:
+  command-error: "&cThere seems to have been an error"
+  cant-place-mask: "&cYou can't place this item"
+  mask-given: "&aYou have been given a mask"
+menus:
+  MASK_MENU:
+    title: "&bMask Menu"
+    rows: 3
+    fills:
+      title: "&b"
+      lore:
+        - ""
+      material: STAINED_GLASS_PANE
+      data: 15
+      url: ""
+      amount: 1
+      glowing: true
+      enchantments:
+        - "DAMAGE_ALL:1"

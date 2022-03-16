@@ -25,13 +25,12 @@ public class ArmorEquipEvent implements Listener {
 
     @EventHandler
     public void onEquip(com.codingforcookies.armorequip.ArmorEquipEvent event) {
-
         new HeartsBuff().apply(event);
         new DamageBuff().apply(event);
         new IncomingDamageBuff().apply(event);
+        new HeartsBuff().remove(event);
         new IncomingDamageBuff().remove(event);
         new DamageBuff().remove(event);
-        new HeartsBuff().remove(event);
 
     }
 }

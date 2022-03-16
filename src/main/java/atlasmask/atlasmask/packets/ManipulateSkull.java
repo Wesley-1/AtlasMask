@@ -19,6 +19,7 @@ import me.elapsed.universal.commons.utils.SkullyUtility;
 import me.elapsed.universal.nms.NMS;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
@@ -60,14 +61,15 @@ public class ManipulateSkull {
     }
 
     @EventSubscription
-    private void onPacket(PacketEventOutEquipment event) {
+    private void onPacket(PacketEventOutEquipment event) throws IllegalAccessException {
         PacketPlayOutEntityEquipment packet = event.getPacket();
         try {
-            System.out.println("TEST");
             ItemStack equipment = CraftItemStack.asBukkitCopy((net.minecraft.server.v1_8_R3.ItemStack) itemField.get(packet));
+
+           if (equipment.getType() == Material.AIR) return;
+
             NBTItem item = new NBTItem(equipment);
 
-            if (!AtlasData.masksInUse.containsKey(event.getPlayer().getUniqueId())) return;
             if (!item.hasKey("ATTACHED")) return;
             if (item.hasKey("EMPTY-USED")) {
                 itemField.set(packet, CraftItemStack.asNMSCopy(SkullyUtility.getCustomSkull(instance.getConfig().getString("Empty.skull-url"))));
@@ -76,6 +78,8 @@ public class ManipulateSkull {
                 System.out.println("TEST");
                 itemField.set(packet, CraftItemStack.asNMSCopy(SkullyUtility.getCustomSkull(instance.getConfig().getString("AtlasMasks." + item.getString("ATTACHED") + ".item.skull-url"))));
             }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

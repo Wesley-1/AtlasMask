@@ -1,6 +1,7 @@
 package atlasmask.atlasmask.listeners;
 
 import atlasmask.atlasmask.AtlasMask;
+import atlasmask.atlasmask.data.AtlasData;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ApplyEmptyToGear implements Listener {
 
@@ -109,9 +111,19 @@ public class ApplyEmptyToGear implements Listener {
             removeAttributes(current.getItem());
             event.setCancelled(true);
             event.setCurrentItem(current.getItem());
-            event.getWhoClicked().getInventory().addItem(newMask1);
-            event.getWhoClicked().getInventory().addItem(newMask2);
-            event.getWhoClicked().getInventory().addItem(instance.getEmptyMask());
+
+            AtlasData.masksInUse.remove(event.getWhoClicked().getUniqueId());
+
+            NBTItem mask2 = new NBTItem(newMask2);
+            NBTItem mask1 = new NBTItem(newMask1);
+            NBTItem empty = new NBTItem(instance.getEmptyMask());
+            mask2.setString(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+            mask1.setString(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+            empty.setString(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+            event.getWhoClicked().getInventory().addItem(mask1.getItem());
+            event.getWhoClicked().getInventory().addItem(mask2.getItem());
+            event.getWhoClicked().getInventory().addItem(empty.getItem());
         }
     }
     public void removeAttributes(ItemStack oldItem) {

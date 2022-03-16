@@ -24,7 +24,6 @@ public class IncomingDamageBuff implements Buff<ArmorEquipEvent> {
             if (!new NBTItem(event.getNewArmorPiece()).hasKey( "IncomingDamage")) return;
             if (AtlasData.masksInUse.containsKey(event.getPlayer().getUniqueId())) return;
             AtlasData.masksInUse.put(event.getPlayer().getUniqueId(), event.getNewArmorPiece());
-            AtlasData.entityIdMap.put(event.getPlayer().getEntityId(), event.getPlayer());
 
         }
     }
@@ -35,7 +34,6 @@ public class IncomingDamageBuff implements Buff<ArmorEquipEvent> {
             if (!new NBTItem(event.getOldArmorPiece()).hasKey( "ATTACHED")) return;
             if (!new NBTItem(event.getOldArmorPiece()).hasKey( "IncomingDamage")) return;
             AtlasData.masksInUse.remove(event.getPlayer().getUniqueId());
-            AtlasData.entityIdMap.remove(event.getPlayer().getEntityId(), event.getPlayer());
 
         }
     }

@@ -26,14 +26,12 @@ public class HeartsBuff implements Buff<ArmorEquipEvent> {
 
     @Override
     public void apply(ArmorEquipEvent event) {
-        event.getPlayer().getInventory().addItem(instance.getMaskRepository().getMaskMap().get("Test"));
         if(event.getNewArmorPiece() != null && event.getNewArmorPiece().getType() != Material.AIR) {
             if (!new NBTItem(event.getNewArmorPiece()).hasKey( "ATTACHED")) return;
             if (!new NBTItem(event.getNewArmorPiece()).hasKey( "ExtraHearts")) return;
             if (AtlasData.masksInUse.containsKey(event.getPlayer().getUniqueId())) return;
             AtlasData.masksInUse.put(event.getPlayer().getUniqueId(), event.getNewArmorPiece());
             event.getPlayer().setMaxHealth(20 + new NBTItem(event.getNewArmorPiece()).getDouble("ExtraHearts"));
-            AtlasData.entityIdMap.put(event.getPlayer().getEntityId(), event.getPlayer());
         }
     }
 
@@ -42,9 +40,8 @@ public class HeartsBuff implements Buff<ArmorEquipEvent> {
         if(event.getOldArmorPiece() != null && event.getOldArmorPiece().getType() != Material.AIR) {
             if (!new NBTItem(event.getOldArmorPiece()).hasKey("ATTACHED")) return;
             if (!new NBTItem(event.getOldArmorPiece()).hasKey("ExtraHearts")) return;
-            event.getPlayer().resetMaxHealth();
+            event.getPlayer().setMaxHealth(20);
             AtlasData.masksInUse.remove(event.getPlayer().getUniqueId());
-            AtlasData.entityIdMap.remove(event.getPlayer().getEntityId(), event.getPlayer());
 
         }
     }

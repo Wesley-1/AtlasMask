@@ -1,5 +1,6 @@
 package atlasmask.atlasmask;
 
+import atlasmask.atlasmask.commands.MaskCommand;
 import atlasmask.atlasmask.data.AtlasData;
 import atlasmask.atlasmask.listeners.*;
 import atlasmask.atlasmask.mask.MaskRepository;
@@ -14,8 +15,11 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.FieldAccessException;
 import de.tr7zw.nbtapi.NBTItem;
+import dev.dbassett.skullcreator.SkullCreator;
 import lombok.Getter;
 import lombok.var;
+import me.elapsed.universal.AtlasComponent;
+import me.elapsed.universal.commons.utils.SkullyUtility;
 import me.elapsed.universal.nms.NMS;
 import me.elapsed.universal.nms.NMS_1_8_R3;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
@@ -34,10 +38,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public final class AtlasMask extends JavaPlugin {
+public final class AtlasMask extends JavaPlugin implements AtlasComponent {
 
     @Getter private MaskRepository maskRepository;
     @Getter private EquipmentInjector injector;
+    @Getter private ManipulateSkull skull;
 
     @Override
     public void onEnable() {
@@ -45,25 +50,30 @@ public final class AtlasMask extends JavaPlugin {
         this.maskRepository = new MaskRepository();
         setupMasks();
         new EventSubscriptions(this);
+        skull = new ManipulateSkull();
         injector = new EquipmentInjector();
+        AtlasData.load();
         Bukkit.getPluginManager().registerEvents(new ArmorEquipEvent(), this);
         Bukkit.getPluginManager().registerEvents(new DamageEvent(), this);
         Bukkit.getPluginManager().registerEvents(new ApplyMaskEvent(), this);
         Bukkit.getPluginManager().registerEvents(new ApplyEmptyMask(), this);
+        Bukkit.getPluginManager().registerEvents(new BlockPlaceEvent(), this);
         Bukkit.getPluginManager().registerEvents(new ApplyEmptyToGear(), this);
+        this.getCommandManager().register(new MaskCommand());
+        tasks();
 
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        AtlasData.save();
     }
 
     public void setupMasks() {
         for (String key : getConfig().getConfigurationSection("AtlasMasks").getKeys(false)) {
             // ItemBuilder maskItem = new ItemBuilder(this, "AtlasMasks." + key + ".item");
          //   SkullyUtility.getCustomSkull("AtlasMasks." + key + ".item.url")
-            ItemStack itemStack = new ItemStack(Material.SKULL_ITEM);
+            ItemStack itemStack = SkullCreator.itemFromUrl(getConfig().getString("AtlasMasks." + key + ".item.skull-url"));
             String maskDisplayName = getConfig().getString("AtlasMasks." + key + ".item.title");
             List<String> loreList = getConfig().getStringList("AtlasMasks." + key + ".item.lore");
             List<String> maskBuffs = getConfig().getStringList("AtlasMasks." + key + ".buffs");
@@ -90,7 +100,7 @@ public final class AtlasMask extends JavaPlugin {
     }
 
     public ItemStack getEmptyMask() {
-        ItemStack itemStack = new ItemStack(Material.SKULL_ITEM);
+        ItemStack itemStack = SkullCreator.itemFromUrl(getConfig().getString("Empty.skull-url"));
         String maskDisplayName = getConfig().getString("Empty.item.title");
         List<String> loreList = getConfig().getStringList("Empty.item.lore");
         int numberOfMasksToHold = 2;
@@ -115,6 +125,10 @@ public final class AtlasMask extends JavaPlugin {
 
 
         return nms.getItem();
+    }
+
+    public void tasks() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, AtlasData::save, 5000, 1L);
     }
 
 }
